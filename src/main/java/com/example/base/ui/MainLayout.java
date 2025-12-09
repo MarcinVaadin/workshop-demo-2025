@@ -30,7 +30,7 @@ public final class MainLayout extends AppLayout {
         appLogo.setSize("48px");
         appLogo.setColor("green");
 
-        var appName = new Span("My Application");
+        var appName = new Span("Copilot Workshop");
         appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
 
         var header = new VerticalLayout(appLogo, appName);
