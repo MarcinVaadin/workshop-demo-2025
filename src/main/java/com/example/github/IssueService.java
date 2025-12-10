@@ -3,6 +3,9 @@ package com.example.github;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.vaadin.flow.component.charts.model.DataSeries;
+import com.vaadin.flow.component.charts.model.DataSeriesItem;
+
 import java.util.List;
 
 @Service
@@ -56,6 +59,18 @@ public class IssueService {
 
     public Long countByImpactLow() {
         return issueRepository.countByImpact(Issue.Impact.Low);
+    }
+
+    public DataSeries getIssuesByDataSeries() {
+        DataSeries dataSeries = new DataSeries();
+        dataSeries.setName("Issues");
+        issueRepository.countGroupedByDate().reversed().forEach(
+            byDate -> {
+                String instant = byDate.getDate().toString();
+                dataSeries.add(new DataSeriesItem(instant, byDate.getCount()));
+            }
+        );
+        return dataSeries;
     }
 
 }

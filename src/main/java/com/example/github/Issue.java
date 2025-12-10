@@ -1,14 +1,10 @@
 package com.example.github;
 
-import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "issues")
@@ -35,8 +31,7 @@ public class Issue {
     @Column(name = "labels")
     private String labels;
 
-    @Column(name = "created_at", nullable = false)
-    @Convert(converter = InstantStringConverter.class)
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private Instant createdAt;
 
     public Long getId() {
@@ -77,21 +72,5 @@ public class Issue {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
-    }
-}
-
-@Converter(autoApply = false)
-class InstantStringConverter implements AttributeConverter<Instant, String> {
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_INSTANT;
-
-    @Override
-    public String convertToDatabaseColumn(Instant attribute) {
-        return attribute == null ? null : FORMATTER.format(attribute);
-    }
-
-    @Override
-    public Instant convertToEntityAttribute(String dbData) {
-        return dbData == null ? null : Instant.parse(dbData);
     }
 }

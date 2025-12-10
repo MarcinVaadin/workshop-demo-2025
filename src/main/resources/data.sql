@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS issues (
                                       state TEXT NOT NULL,
                                       title TEXT NOT NULL,
                                       labels TEXT,
-                                      created_at TEXT NOT NULL
+                                      created_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 BEGIN TRANSACTION;
