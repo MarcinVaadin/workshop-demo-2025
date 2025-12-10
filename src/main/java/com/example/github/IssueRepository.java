@@ -23,14 +23,6 @@ public interface IssueRepository extends JpaRepository<Issue, Long> {
             """, nativeQuery = true)
     List<IssueCountByDate> countGroupedByDate();
 
-    default List<Issue> findByImpact(Pageable pageable, Issue.Impact impact) {
-        return findByLabelsContains("Impact: " + impact.name(), pageable);
-    }
-
-    default List<Issue> findBySeverity(Pageable pageable, Issue.Severity severity) {
-        return findByLabelsContains("Severity: " + severity.name(), pageable);
-    }
-
     default long countBySeverity(Issue.Severity severity) {
         return countByLabelsContains("Severity: " + severity.name());
     }

@@ -1,12 +1,12 @@
 package com.example.github;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.vaadin.flow.component.charts.model.DataSeries;
 import com.vaadin.flow.component.charts.model.DataSeriesItem;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class IssueService {
@@ -21,24 +21,19 @@ public class IssueService {
         return issueRepository.count();
     }
 
-    public List<Issue> findBySeverityBlocker(Pageable pageable) {
-        return issueRepository.findBySeverity(pageable, Issue.Severity.Blocker);
+    public List<Issue> findIssues() {
+        return issueRepository.findAll();
     }
 
-    public List<Issue> findBySeverityMajor(Pageable pageable) {
-        return issueRepository.findBySeverity(pageable, Issue.Severity.Major);
-    }
+    public List<Issue> findIssues(List<String> labels) {
+        var data = issueRepository.findAll();
+        for (String label : labels) {
 
-    public List<Issue> findBySeverityMinor(Pageable pageable) {
-        return issueRepository.findBySeverity(pageable, Issue.Severity.Minor);
-    }
-
-    public List<Issue> findByImpactHigh(Pageable pageable) {
-        return issueRepository.findByImpact(pageable, Issue.Impact.High);
-    }
-
-    public List<Issue> findByImpactLow(Pageable pageable) {
-        return issueRepository.findByImpact(pageable, Issue.Impact.Low);
+            data = data.stream().filter(issue -> issue.getLabels() != null)
+                .filter(issue -> issue.getLabels().contains(label))
+                .toList();
+        }
+        return data;
     }
 
     public Long countBySeverityMinor() {
@@ -71,6 +66,14 @@ public class IssueService {
             }
         );
         return dataSeries;
+    }
+
+    public List<String> filterSeverity() {
+        return Stream.of(Issue.Severity.values()).map(Enum::name).toList();
+    }
+
+    public List<String> filterImpact() {
+        return Stream.of(Issue.Impact.values()).map(Enum::name).toList();
     }
 
 }

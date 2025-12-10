@@ -10,11 +10,11 @@ import java.time.Instant;
 @Table(name = "issues")
 public class Issue {
 
-    enum Severity {
+    public enum Severity {
         Blocker, Major, Minor
     }
 
-    enum Impact {
+    public enum Impact {
         High, Low
     }
 
@@ -33,6 +33,10 @@ public class Issue {
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private Instant createdAt;
+
+    private Issue.Severity severity;
+
+    private Issue.Impact impact;
 
     public Long getId() {
         return id;
@@ -72,5 +76,33 @@ public class Issue {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Severity getSeverity() {
+        if (labels.contains("Severity: Blocker")) {
+            return Severity.Blocker;
+        } else if (labels.contains("Severity: Major")) {
+            return Severity.Major;
+        } else if (labels.contains("Severity: Minor")) {
+            return Severity.Minor;
+        }
+        return null;
+    }
+
+    public void setSeverity(Severity severity) {
+        this.severity = severity;
+    }
+
+    public Impact getImpact() {
+        if (labels.contains("Impact: High")) {
+            return Impact.High;
+        } else if (labels.contains("Impact: Low")) {
+            return Impact.Low;
+        }
+        return null;
+    }
+
+    public void setImpact(Impact impact) {
+        this.impact = impact;
     }
 }
